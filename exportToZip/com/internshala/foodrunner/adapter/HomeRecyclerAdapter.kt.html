@@ -1,0 +1,176 @@
+<html>
+<head>
+<title>HomeRecyclerAdapter.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #0000ff;}
+.s3 { color: #008000; font-weight: bold;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+HomeRecyclerAdapter.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span>com.internshala.foodrunner.adapter
+
+    import android.content.Context
+    import android.content.Intent
+    import android.os.AsyncTask
+    import android.os.Build
+    import android.os.Bundle
+    import android.view.LayoutInflater
+    import android.view.View
+    import android.view.ViewGroup
+    import android.widget.*
+    import androidx.appcompat.app.AppCompatActivity
+    import androidx.cardview.widget.CardView
+    import androidx.fragment.app.FragmentActivity
+    import androidx.recyclerview.widget.RecyclerView
+    import androidx.room.Room
+    import com.internshala.foodrunner.R
+    import com.internshala.foodrunner.activity.CartActivity
+    import com.internshala.foodrunner.activity.DescriptionActivity
+    import com.internshala.foodrunner.database.RestaurantDatabase
+    import com.internshala.foodrunner.database.RestaurantEntity
+    import com.internshala.foodrunner.model.Restaurant
+    import com.squareup.picasso.Picasso
+
+    <span class="s0">class </span>HomeRecyclerAdapter  (<span class="s0">val </span>context: Context, <span class="s0">var </span>itemList:ArrayList&lt;Restaurant&gt;):
+        RecyclerView.Adapter&lt;HomeRecyclerAdapter.HomeViewHolder&gt;() {
+
+        <span class="s0">class </span>HomeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+            <span class="s0">val </span>txtRestaurantName: TextView = view.findViewById(R.id.txtRestaurantName)
+            <span class="s0">val </span>txtPrice: TextView = view.findViewById(R.id.txtPrice)
+            <span class="s0">val </span>txtRating: TextView = view.findViewById(R.id.txtRating)
+            <span class="s0">val </span>imgRestaurantImage: ImageView = view.findViewById(R.id.imgRestaurantImage)
+            <span class="s0">val </span>imgFav: ImageButton = view.findViewById(R.id.imgFav)
+            <span class="s0">val </span>cardRestaurant: CardView = view.findViewById(R.id.cardRestaurant)
+
+            <span class="s0">val </span>rlContent: RelativeLayout = view.findViewById(R.id.rlContent)
+        }
+
+        <span class="s0">val </span>button: Boolean = <span class="s0">false</span>
+        override <span class="s0">fun </span>onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
+            <span class="s0">val </span>view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_home_single_row, parent, <span class="s0">false</span>)
+
+            <span class="s0">return </span>HomeViewHolder(view)
+        }
+
+        override <span class="s0">fun </span>getItemCount(): Int {
+            <span class="s0">return </span>itemList.size
+        }
+
+        override <span class="s0">fun </span>getItemViewType(position: Int): Int {
+            <span class="s0">return </span>position
+        }
+
+        override <span class="s0">fun </span>onBindViewHolder(holder: HomeViewHolder, position: Int) {
+            <span class="s0">val </span>restaurant = itemList[position]
+
+            <span class="s0">if </span>(Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.LOLLIPOP) {
+                holder.imgRestaurantImage.clipToOutline = <span class="s0">true</span>
+            }
+
+            holder.txtRestaurantName.text = restaurant.restaurantName
+            holder.txtRating.text = restaurant.restaurantRating
+            holder.txtPrice.text = restaurant.restaurantCost_For_One
+
+            Picasso.get().load(restaurant.restaurantImage).error(R.drawable.default_restaurant_image).into(holder.imgRestaurantImage)
+
+
+            <span class="s0">val </span>listOfFav = GetFavAsyncTask(context).execute().get()
+
+            <span class="s0">if </span>(listOfFav.isNotEmpty() &amp;&amp; listOfFav.contains(restaurant.restaurantId.toString())) {
+                holder.imgFav.setBackgroundResource(R.drawable.fav)
+
+            } <span class="s0">else </span>{
+                holder.imgFav.setBackgroundResource(R.drawable.fav2)
+            }
+
+            holder.imgFav.setOnClickListener {
+                <span class="s0">val </span>restaurantEntity = RestaurantEntity(
+                        restaurant.restaurantId.toInt(),
+                        restaurant.restaurantName,
+                        restaurant.restaurantRating,
+                        restaurant.restaurantCost_For_One,
+                        restaurant.restaurantImage
+                )
+                <span class="s0">if </span>(!DBAsyncTask(context, restaurantEntity, <span class="s2">1</span>).execute().get()) {
+                    <span class="s0">val </span>async = DBAsyncTask(context, restaurantEntity, <span class="s2">2</span>).execute()
+                    <span class="s0">val </span>data = async.get()
+                    <span class="s0">if </span>(data) {
+                        Toast.makeText(context, <span class="s3">&quot;Added to Favourites&quot;</span>, Toast.LENGTH_SHORT).show()
+                        holder.imgFav.setBackgroundResource(R.drawable.fav)
+                    }
+                } <span class="s0">else </span>{
+                    <span class="s0">val </span>async = DBAsyncTask(context, restaurantEntity, <span class="s2">3</span>).execute()
+                    <span class="s0">val </span>data = async.get()
+                    <span class="s0">if </span>(data) {
+                        Toast.makeText(context, <span class="s3">&quot;Removed from Favourites&quot;</span>, Toast.LENGTH_SHORT).show()
+                        holder.imgFav.setBackgroundResource(R.drawable.fav2)
+                    }
+                }
+            }
+
+            holder.rlContent.setOnClickListener {
+                <span class="s0">val </span>intent = Intent(context, DescriptionActivity::<span class="s0">class</span>.java)
+                intent.putExtra(<span class="s3">&quot;restaurant_id&quot;</span>, restaurant.restaurantId)
+                intent.putExtra(<span class="s3">&quot;restaurant_name&quot;</span>, restaurant.restaurantName)
+                context.startActivity(intent)
+
+            }
+        }
+
+        <span class="s0">fun </span>filterList(filteredList: ArrayList&lt;Restaurant&gt;) {
+            itemList = filteredList
+            notifyDataSetChanged()
+        }
+    }
+
+    <span class="s0">class </span>GetFavAsyncTask(context: Context): AsyncTask&lt;Void, Void, List&lt;String&gt;&gt;(){
+        <span class="s0">val </span>db= Room.databaseBuilder(context, RestaurantDatabase::<span class="s0">class</span>.java,<span class="s3">&quot;restaurant-db&quot;</span>).build()
+
+        override <span class="s0">fun </span>doInBackground(vararg params: Void?): List&lt;String&gt; {
+            <span class="s0">val </span>list=db.restaurantDao().getAllRestaurants()
+            <span class="s0">val </span>listOfIds= arrayListOf&lt;String&gt;()
+            <span class="s0">for </span>(i <span class="s0">in </span>list){
+                listOfIds.add(i.id.toString())
+            }
+            <span class="s0">return </span>listOfIds
+        }}
+
+    <span class="s0">class </span>DBAsyncTask(context: Context, <span class="s0">val </span>restaurantEntity: RestaurantEntity, <span class="s0">val </span>mode:Int):
+        AsyncTask&lt;Void, Void, Boolean&gt;(){
+        <span class="s0">val </span>db= Room.databaseBuilder(context, RestaurantDatabase::<span class="s0">class</span>.java,<span class="s3">&quot;restaurant-db&quot;</span>).build()
+
+        override <span class="s0">fun </span>doInBackground(vararg params: Void?): Boolean {
+            <span class="s0">when</span>(mode){
+                <span class="s2">1</span>-&gt;{
+                    <span class="s0">val </span>res: RestaurantEntity?=db.restaurantDao().getRestaurantById(restaurantEntity.id.toString())
+                    db.close()
+                    <span class="s0">return </span>res!=<span class="s0">null</span>
+                }
+                <span class="s2">2</span>-&gt;{
+                    db.restaurantDao().insertRestaurant(restaurantEntity)
+                    db.close()
+                    <span class="s0">return true</span>
+                }
+                <span class="s2">3</span>-&gt;{
+                    db.restaurantDao().deleteRestaurant(restaurantEntity)
+                    db.close()
+                    <span class="s0">return true</span>
+                }
+            }
+            <span class="s0">return false</span>
+        }
+    }
+
+
+</pre>
+</body>
+</html>

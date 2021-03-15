@@ -1,0 +1,61 @@
+<html>
+<head>
+<title>CartRecyclerAdapter.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #008000; font-weight: bold;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+CartRecyclerAdapter.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span>com.internshala.foodrunner.adapter
+
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.internshala.foodrunner.R
+import com.internshala.foodrunner.model.Description
+import kotlinx.android.synthetic.main.recycler_cart_single_row.view.*
+
+<span class="s0">class </span>CartRecyclerAdapter(<span class="s0">val </span>cartArray:ArrayList&lt;Description&gt;,
+     <span class="s0">val </span>context:Context):
+    RecyclerView.Adapter&lt;CartRecyclerAdapter.CartViewHolder&gt;(){
+
+    <span class="s0">class </span>CartViewHolder(view: View):RecyclerView.ViewHolder(view){
+        <span class="s0">val </span>txtDishName:TextView=view.findViewById(R.id.txtDishName)
+        <span class="s0">val </span>txtCost:TextView=view.findViewById(R.id.txtCost)
+    }
+
+    override <span class="s0">fun </span>getItemViewType(position: Int): Int {
+        <span class="s0">return </span>position
+    }
+
+    override <span class="s0">fun </span>onCreateViewHolder(parent: ViewGroup,
+        viewType: Int
+    ): CartRecyclerAdapter.CartViewHolder {
+        <span class="s0">val </span>view=LayoutInflater.from(parent.context).inflate(R.layout.recycler_cart_single_row,parent,<span class="s0">false</span>)
+        <span class="s0">return </span>CartViewHolder(view)
+    }
+
+    override <span class="s0">fun </span>getItemCount(): Int {
+        <span class="s0">return </span>cartArray.size
+    }
+
+    override <span class="s0">fun </span>onBindViewHolder(holder: CartRecyclerAdapter.CartViewHolder, position: Int) {
+        <span class="s0">val </span>cartObj=cartArray[position]
+        holder.txtDishName.text=cartObj.dishName
+        <span class="s0">val </span>price=<span class="s2">&quot;Rs. </span><span class="s0">${</span>cartObj.dishPrice<span class="s0">}</span><span class="s2">&quot;</span>
+        holder.txtCost.text=price
+    }
+}</pre>
+</body>
+</html>

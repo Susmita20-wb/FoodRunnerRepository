@@ -1,0 +1,85 @@
+<html>
+<head>
+<title>DescriptionRecyclerAdapter.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #0000ff;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+DescriptionRecyclerAdapter.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span>com.internshala.foodrunner.adapter
+
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.Button
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.internshala.foodrunner.R
+import com.internshala.foodrunner.model.Description
+import com.internshala.foodrunner.model.Restaurant
+
+<span class="s0">class </span>DescriptionRecyclerAdapter(<span class="s0">val </span>context:Context, <span class="s0">val </span>itemList: ArrayList&lt;Description&gt;,<span class="s0">val </span>listener: OnItemClickListener):
+    RecyclerView.Adapter&lt;DescriptionRecyclerAdapter.DescriptionViewHolder&gt;() {
+
+    companion <span class="s0">object </span>{
+        <span class="s0">var </span>isCartEmpty=<span class="s0">true</span>
+    }
+
+    <span class="s0">class </span>DescriptionViewHolder(view:View):RecyclerView.ViewHolder(view){
+        <span class="s0">val </span>txtCount:TextView=view.findViewById(R.id.txtCount)
+        <span class="s0">val </span>txtDishName:TextView=view.findViewById(R.id.txtDishName)
+        <span class="s0">val </span>txtPrice:TextView=view.findViewById(R.id.txtPrice)
+        <span class="s0">val </span>btnAdd:Button=view.findViewById(R.id.btnAdd)
+        <span class="s0">val </span>btnRemove:Button=view.findViewById(R.id.btnRemove)
+    }
+
+    override <span class="s0">fun </span>onCreateViewHolder(parent: ViewGroup, viewType: Int): DescriptionViewHolder {
+       <span class="s0">val </span>view=LayoutInflater.from(parent.context).inflate(R.layout.recycler_description_single_row,parent,<span class="s0">false</span>)
+        <span class="s0">return </span>DescriptionViewHolder(view)
+    }
+
+    override <span class="s0">fun </span>getItemCount(): Int {
+        <span class="s0">return </span>itemList.size
+    }
+
+    <span class="s0">interface </span>OnItemClickListener{
+        <span class="s0">fun </span>onAddItemClick(dishObject:Description)
+        <span class="s0">fun </span>onRemoveItemClick(dishObject:Description)
+    }
+
+    override <span class="s0">fun </span>onBindViewHolder(holder: DescriptionViewHolder, position: Int) {
+        <span class="s0">val </span>description=itemList[position]
+        holder.txtDishName.text=description.dishName
+        holder.txtPrice.text=description.dishPrice
+        holder.txtCount.text=(position+<span class="s2">1</span>).toString()
+
+        holder.btnAdd.setOnClickListener{
+            holder.btnRemove.visibility=View.VISIBLE
+            holder.btnAdd.visibility=View.GONE
+            listener.onAddItemClick(description)
+        }
+
+        holder.btnRemove.setOnClickListener{
+            holder.btnRemove.visibility=View.GONE
+            holder.btnAdd.visibility=View.VISIBLE
+            listener.onRemoveItemClick(description)
+        }
+
+    }
+
+    override <span class="s0">fun </span>getItemViewType(position: Int): Int {
+        <span class="s0">return </span>position
+    }
+}</pre>
+</body>
+</html>

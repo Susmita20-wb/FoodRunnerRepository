@@ -1,0 +1,85 @@
+<html>
+<head>
+<title>OrderHistoryAdapter.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #0000ff;}
+.s3 { color: #008000; font-weight: bold;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+OrderHistoryAdapter.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span>com.internshala.foodrunner.adapter
+
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.internshala.foodrunner.R
+import com.internshala.foodrunner.model.Description
+import com.internshala.foodrunner.model.OrderDetails
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+
+<span class="s0">class </span>OrderHistoryAdapter (<span class="s0">val </span>context: Context,<span class="s0">val </span>orderList:ArrayList&lt;OrderDetails&gt;):
+    RecyclerView.Adapter&lt;OrderHistoryAdapter.OrderHistoryViewHolder&gt; (){
+    <span class="s0">class </span>OrderHistoryViewHolder(view: View):RecyclerView.ViewHolder(view){
+        <span class="s0">val </span>txtResName:TextView=view.findViewById(R.id.txtResName)
+        <span class="s0">val </span>txtDate:TextView=view.findViewById(R.id.txtDate)
+        <span class="s0">val </span>recyclerView:RecyclerView=view.findViewById(R.id.recyclerView)
+    }
+
+    override <span class="s0">fun </span>onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderHistoryViewHolder {
+        <span class="s0">val </span>view=LayoutInflater.from(context).inflate(R.layout.recycler_orderhistory_single_row,parent,<span class="s0">false</span>)
+        <span class="s0">return </span>OrderHistoryViewHolder(view)
+    }
+
+    override <span class="s0">fun </span>getItemCount(): Int {
+        <span class="s0">return </span>orderList.size
+    }
+
+    override <span class="s0">fun </span>onBindViewHolder(holder: OrderHistoryViewHolder, position: Int) {
+        <span class="s0">val </span>orderHistory=orderList[position]
+        holder.txtResName.text=orderHistory.resName
+        holder.txtDate.text=formatDate(orderHistory.orderDate)
+        setUpRecycler(holder.recyclerView,orderHistory)
+    }
+
+    <span class="s0">fun </span>setUpRecycler(recyclerView: RecyclerView,orderList: OrderDetails){
+        <span class="s0">val </span>foodItems=ArrayList&lt;Description&gt;()
+        <span class="s0">for</span>(i <span class="s0">in </span><span class="s2">0 </span>until orderList.foodItem.length()){
+            <span class="s0">val </span>foodJson=orderList.foodItem.getJSONObject(i)
+            foodItems.add(Description(
+                foodJson.getString(<span class="s3">&quot;food_item_id&quot;</span>),
+                foodJson.getString(<span class="s3">&quot;name&quot;</span>),
+                foodJson.getString(<span class="s3">&quot;cost&quot;</span>)
+            )
+            )
+        }
+
+        <span class="s0">val </span>cartItemAdapter= CartRecyclerAdapter(foodItems,context)
+        <span class="s0">val </span>layoutManager=LinearLayoutManager(context)
+        recyclerView.itemAnimator=DefaultItemAnimator()
+        recyclerView.adapter=cartItemAdapter
+    }
+
+    <span class="s0">fun </span>formatDate(dateString: String):String?{
+        <span class="s0">val </span>input=SimpleDateFormat(<span class="s3">&quot;dd-MM-yy HH:mm:ss&quot;</span>, Locale.ENGLISH)
+        <span class="s0">val </span>date:Date=input.parse(dateString) <span class="s0">as </span>Date
+        <span class="s0">val </span>output=SimpleDateFormat(<span class="s3">&quot;dd/MM/yyyy&quot;</span>,Locale.ENGLISH)
+        <span class="s0">return </span>output.format(date)
+    }
+}</pre>
+</body>
+</html>

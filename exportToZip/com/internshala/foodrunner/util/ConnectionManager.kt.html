@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>ConnectionManager.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+ConnectionManager.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span>com.internshala.foodrunner.util
+
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
+
+<span class="s0">class </span>ConnectionManager {
+    <span class="s0">fun </span>checkConnectivity(context : Context):Boolean{
+        <span class="s0">val </span>connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) <span class="s0">as </span>ConnectivityManager
+        <span class="s0">val </span>activeNetwork: NetworkInfo?=connectivityManager.activeNetworkInfo
+        <span class="s0">if </span>(activeNetwork?.isConnected!=<span class="s0">null</span>){
+            <span class="s0">return </span>activeNetwork.isConnected
+        }
+        <span class="s0">else</span>{
+            <span class="s0">return false</span>
+        }
+    }
+}</pre>
+</body>
+</html>

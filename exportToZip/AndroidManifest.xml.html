@@ -1,0 +1,71 @@
+<html>
+<head>
+<title>AndroidManifest.xml</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000000; font-style: italic;}
+.s1 { color: #0000ff; font-weight: bold;}
+.s2 { color: #000000;}
+.s3 { color: #008000; font-weight: bold;}
+.s4 { color: #000080; font-weight: bold;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+AndroidManifest.xml</font>
+</center></td></tr></table>
+<pre><span class="s0">&lt;?</span><span class="s1">xml version</span><span class="s3">=&quot;1.0&quot; </span><span class="s1">encoding</span><span class="s3">=&quot;utf-8&quot;</span><span class="s0">?&gt;</span>
+&lt;<span class="s4">manifest </span><span class="s1">xmlns:android</span><span class="s3">=&quot;http://schemas.android.com/apk/res/android&quot;</span>
+    <span class="s1">package</span><span class="s3">=&quot;com.internshala.foodrunner&quot;</span>&gt;
+
+    &lt;<span class="s4">uses-permission </span><span class="s1">android:name</span><span class="s3">=&quot;android.permission.INTERNET&quot; </span>/&gt;
+    &lt;<span class="s4">uses-permission </span><span class="s1">android:name</span><span class="s3">=&quot;android.permission.ACCESS_NETWORK_STATE&quot; </span>/&gt;
+
+    &lt;<span class="s4">application</span>
+        <span class="s1">android:allowBackup</span><span class="s3">=&quot;true&quot;</span>
+        <span class="s1">android:icon</span><span class="s3">=&quot;@mipmap/food_app_icon&quot;</span>
+        <span class="s1">android:label</span><span class="s3">=&quot;@string/app_name&quot;</span>
+        <span class="s1">android:networkSecurityConfig</span><span class="s3">=&quot;@xml/network_security_config&quot;</span>
+        <span class="s1">android:roundIcon</span><span class="s3">=&quot;@mipmap/food_app_icon_round&quot;</span>
+        <span class="s1">android:supportsRtl</span><span class="s3">=&quot;true&quot;</span>
+        <span class="s1">android:theme</span><span class="s3">=&quot;@style/Theme.FoodRunner&quot;</span>&gt;
+        &lt;<span class="s4">activity </span><span class="s1">android:name</span><span class="s3">=&quot;.activity.PlaceOrderActivity&quot;</span>
+            <span class="s1">android:screenOrientation</span><span class="s3">=&quot;portrait&quot;</span>
+            <span class="s1">android:configChanges</span><span class="s3">=&quot;orientation|screenSize&quot;</span>/&gt;
+        &lt;<span class="s4">activity </span><span class="s1">android:name</span><span class="s3">=&quot;.activity.DescriptionActivity&quot;</span>
+            <span class="s1">android:screenOrientation</span><span class="s3">=&quot;portrait&quot;</span>
+            <span class="s1">android:configChanges</span><span class="s3">=&quot;orientation|screenSize&quot;</span>/&gt;
+        &lt;<span class="s4">activity </span><span class="s1">android:name</span><span class="s3">=&quot;.activity.CartActivity&quot;</span>
+            <span class="s1">android:screenOrientation</span><span class="s3">=&quot;portrait&quot;</span>
+            <span class="s1">android:configChanges</span><span class="s3">=&quot;orientation|screenSize&quot;</span>/&gt;
+        &lt;<span class="s4">activity </span><span class="s1">android:name</span><span class="s3">=&quot;.activity.ResetPasswordActivity&quot;</span>
+            <span class="s1">android:screenOrientation</span><span class="s3">=&quot;portrait&quot;</span>
+            <span class="s1">android:configChanges</span><span class="s3">=&quot;orientation|screenSize&quot;</span>/&gt;
+        &lt;<span class="s4">activity </span><span class="s1">android:name</span><span class="s3">=&quot;.activity.ForgotActivity&quot;</span>
+            <span class="s1">android:screenOrientation</span><span class="s3">=&quot;portrait&quot;</span>
+            <span class="s1">android:configChanges</span><span class="s3">=&quot;orientation|screenSize&quot;</span>/&gt;
+        &lt;<span class="s4">activity </span><span class="s1">android:name</span><span class="s3">=&quot;.activity.RegisterActivity&quot;</span>
+            <span class="s1">android:screenOrientation</span><span class="s3">=&quot;portrait&quot;</span>
+            <span class="s1">android:configChanges</span><span class="s3">=&quot;orientation|screenSize&quot;</span>/&gt;
+        &lt;<span class="s4">activity </span><span class="s1">android:name</span><span class="s3">=&quot;.activity.NewActivity&quot;</span>
+            <span class="s1">android:screenOrientation</span><span class="s3">=&quot;portrait&quot;</span>
+            <span class="s1">android:configChanges</span><span class="s3">=&quot;orientation|screenSize&quot;</span>/&gt;
+        &lt;<span class="s4">activity </span><span class="s1">android:name</span><span class="s3">=&quot;.activity.MainActivity&quot;</span>
+            <span class="s1">android:screenOrientation</span><span class="s3">=&quot;portrait&quot;</span>
+            <span class="s1">android:configChanges</span><span class="s3">=&quot;orientation|screenSize&quot; </span>/&gt;
+        &lt;<span class="s4">activity </span><span class="s1">android:name</span><span class="s3">=&quot;.activity.SplashActivity&quot;</span>
+            <span class="s1">android:screenOrientation</span><span class="s3">=&quot;portrait&quot;</span>
+            <span class="s1">android:configChanges</span><span class="s3">=&quot;orientation|screenSize&quot;</span>&gt;
+            &lt;<span class="s4">intent-filter</span>&gt;
+                &lt;<span class="s4">action </span><span class="s1">android:name</span><span class="s3">=&quot;android.intent.action.MAIN&quot; </span>/&gt;
+
+                &lt;<span class="s4">category </span><span class="s1">android:name</span><span class="s3">=&quot;android.intent.category.LAUNCHER&quot; </span>/&gt;
+            &lt;/<span class="s4">intent-filter</span>&gt;
+        &lt;/<span class="s4">activity</span>&gt;
+    &lt;/<span class="s4">application</span>&gt;
+
+&lt;/<span class="s4">manifest</span>&gt;</pre>
+</body>
+</html>
